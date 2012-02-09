@@ -27,14 +27,13 @@ class Statement {
 }
 
 object MySql2Sqlite extends Application {
-//  val s = Source.fromFile("dump.sql", "UTF-8")
-  val s = Source.fromFile("dump2.sql", "UTF-8")
+  val s = Source.fromFile("/home/woden/sqlite/dump2.sql", "UTF-8")
   var createArr = new Array[String](3)
   var createStatArr = new ArrayBuffer[Statement]
   var createStatement = false  
   var insertStatement = false  
-  val out = new java.io.FileWriter("/tmp/sqlite/createtables.sql")
-  val dataout = new java.io.FileWriter("/tmp/sqlite/updatedata.sql")
+  val out = new java.io.FileWriter("/home/woden/sqlite/createtables.sql")
+  val dataout = new java.io.FileWriter("/home/woden/sqlite/updatedata.sql")
   var table = ""
   var havePrime = false
 
