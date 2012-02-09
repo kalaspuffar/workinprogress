@@ -20,9 +20,7 @@ class Statement {
     	name + typeString + nullString + defaultString 
     } else {
     	sqlStr
-    }    
-    
-    
+    }
   }
 }
 
@@ -36,7 +34,6 @@ object MySql2Sqlite extends Application {
   val dataout = new java.io.FileWriter("/home/woden/sqlite/updatedata.sql")
   var table = ""
   var havePrime = false
-  
 
   s.getLines.foreach( (line) => {
     
@@ -49,8 +46,6 @@ object MySql2Sqlite extends Application {
       val insStatement = line.substring(0, i);
       val arrValues = line.substring(i+1).split("\\),\\(");
       for(value <- arrValues) {
-    	  
-    		 
     	  dataout.write(insStatement+"("+(if(value.endsWith(");")) value.replace(");", "") else value)+");\n");       
       }      
       dataout.flush();
