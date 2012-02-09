@@ -36,6 +36,7 @@ object MySql2Sqlite extends Application {
   val dataout = new java.io.FileWriter("/home/woden/sqlite/updatedata.sql")
   var table = ""
   var havePrime = false
+  
 
   s.getLines.foreach( (line) => {
     
