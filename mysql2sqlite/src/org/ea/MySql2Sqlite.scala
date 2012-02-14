@@ -25,13 +25,19 @@ class Statement {
 }
 
 object MySql2Sqlite extends Application {
-  val s = Source.fromFile("/home/woden/sqlite/dump2.sql", "UTF-8")
+//  val path = "/home/woden/sqlite/";
+  val path = "c:/temp/sqltest/";
+//  val s = Source.fromFile(path+"dump2.sql", "UTF-8")
+//  val s = Source.fromFile(path+"dump3.sql")
+  val s = Source.fromFile(path+"dump3.sql", "latin1")
   var createArr = new Array[String](3)
   var createStatArr = new ArrayBuffer[Statement]
   var createStatement = false  
   var insertStatement = false  
-  val out = new java.io.FileWriter("/home/woden/sqlite/createtables.sql")
-  val dataout = new java.io.FileWriter("/home/woden/sqlite/updatedata.sql")
+  val out = new java.io.FileWriter(path+"createtables.sql")
+  var dataout = new java.io.FileWriter(path+"update.sql")
+  var outfile = 1;
+  var filenr = 1;
   var table = ""
   var havePrime = false
 
@@ -44,11 +50,22 @@ object MySql2Sqlite extends Application {
     if(insertStatement) {
       val i = line.indexOf(" VALUES (")+8;
       val insStatement = line.substring(0, i);
-      val arrValues = line.substring(i+1).split("\\),\\(");
+      
+      val changeEscapes = line.replaceAll("\\\\'", "''");
+      
+      val arrValues = changeEscapes.substring(i+1).split("\\),\\(");
       for(value <- arrValues) {
     	  dataout.write(insStatement+"("+(if(value.endsWith(");")) value.replace(");", "") else value)+");\n");       
       }      
       dataout.flush();
+      
+      if(outfile == 100) {
+        dataout.close();
+        dataout = new java.io.FileWriter(path+"update"+filenr+".sql");
+        outfile = 1;
+        filenr = filenr + 1;
+      }
+      outfile = outfile + 1;
     }    
 
     if(line.contains(");")) {
@@ -57,7 +74,8 @@ object MySql2Sqlite extends Application {
     
     if(line.trim.toLowerCase.startsWith("create")) {
       createStatement = true
-      createArr = line.split("`")
+//      createArr = line.split("`")
+      createArr = line.split("\"")
       if(createArr.length > 1) {
          table = createArr.apply(1)
          //out.write("drop table if exists '"+table+"';\n")
