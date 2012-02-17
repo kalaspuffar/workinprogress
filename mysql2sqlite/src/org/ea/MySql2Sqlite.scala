@@ -51,7 +51,7 @@ object MySql2Sqlite extends Application {
       val i = line.indexOf(" VALUES (")+8;
       val insStatement = line.substring(0, i);
       
-      val changeEscapes = line.replaceAll("\\\\'", "''");
+      val changeEscapes = line.replaceAll("\\\\'", "''").replaceAll("\\\\''", "\\'");
       
       val arrValues = changeEscapes.substring(i+1).split("\\),\\(");
       for(value <- arrValues) {
